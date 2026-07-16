@@ -1,0 +1,51 @@
+name: Firmware
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install PlatformIO
+        run: python -m pip install --require-hashes -r .github/platformio-requirements.txt
+
+      - name: Run repository and secret gates
+        run: |
+          python scripts/secret_scan.py
+          python scripts/check_repo.py
+
+      - name: Prepare example Wi-Fi configuration
+        run: cp firmware/include/wifi_config.example.h firmware/include/wifi_config.h
+
+      - name: Check Python tools
+        run: python -m py_compile tools/tcp_client.py tools/web/server.py
+
+      - name: Build firmware
+        run: pio run -d firmware
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: stm32-multisensor-firmware-${{ github.sha }}
+          path: |
+            firmware/.pio/build/bluepill_f103c8/firmware.bin
+            firmware/.pio/build/bluepill_f103c8/firmware.elf
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">STM32 multisensor data acquisition wiring boundaries</title>
+  <desc id="desc">A source-derived wiring overview. ESP-01S uses USART1 PA9 and PA10. Debug uses USART2 PA2 and PA3. Industrial sensor voltage interfaces remain pending hardware confirmation.</desc>
+  <style>
+    :root{color-scheme:light dark}
+    .bg{fill:#fff}.panel{fill:#fff8f1;stroke:#e87524;stroke-width:3}.module{fill:#f6f8fa;stroke:#59636e;stroke-width:2}
+    .pending{fill:#fff4d6;stroke:#b7791f;stroke-width:2;stroke-dasharray:9 7}.wire{stroke:#334155;stroke-width:3;fill:none}
+    .power{stroke:#d14343;stroke-width:3;fill:none}.label{font:600 23px ui-sans-serif,system-ui,sans-serif;fill:#18202a}
+    .small{font:17px ui-sans-serif,system-ui,sans-serif;fill:#334155}.note{font:600 17px ui-sans-serif,system-ui,sans-serif;fill:#9a3412}
+    @media (prefers-color-scheme:dark){.bg{fill:#0d1117}.panel{fill:#21170f;stroke:#ff8a3d}.module{fill:#161b22;stroke:#8b949e}.pending{fill:#2a2112;stroke:#d29922}.wire{stroke:#c9d1d9}.power{stroke:#ff7b72}.label{fill:#f0f6fc}.small{fill:#c9d1d9}.note{fill:#ffa657}}
+  </style>
+  <rect class="bg" width="1200" height="760"/>
+  <text class="label" x="50" y="52">接线边界图 / Wiring overview</text>
+  <text class="small" x="50" y="82">按当前源码整理；不是 PCB 原理图；当前提交尚未真机复测</text>
+
+  <rect class="panel" x="430" y="170" width="340" height="400" rx="24"/>
+  <text class="label" x="510" y="220">STM32F103C8T6</text>
+  <text class="small" x="470" y="270">PB12 · DS18B20</text>
+  <text class="small" x="470" y="310">PA1 · FSR402 ADC</text>
+  <text class="small" x="470" y="350">PA0 · A1104 EXTI</text>
+  <text class="small" x="470" y="390">PA4 · E3Z-LS63 input</text>
+  <text class="small" x="470" y="430">PA5/6/7 + PB1 · W25Q64</text>
+  <text class="small" x="470" y="470">PB6/PB7 · SSD1306</text>
+  <text class="small" x="470" y="510">PA9/PA10 · ESP USART1</text>
+  <text class="small" x="470" y="550">PA2/PA3 · Debug USART2</text>
+
+  <rect class="module" x="50" y="145" width="270" height="82" rx="14"/><text class="label" x="89" y="180">DS18B20</text><text class="small" x="89" y="207">DATA → PB12 · 4.7 kΩ pull-up</text>
+  <path class="wire" d="M320 186 H430"/>
+  <rect class="pending" x="50" y="255" width="270" height="82" rx="14"/><text class="label" x="89" y="290">FSR402</text><text class="small" x="89" y="317">Divider value pending → PA1</text>
+  <path class="wire" d="M320 296 H430"/>
+  <rect class="pending" x="50" y="365" width="270" height="82" rx="14"/><text class="label" x="89" y="400">A1104</text><text class="small" x="89" y="427">Output / pull-up pending → PA0</text>
+  <path class="wire" d="M320 406 H430"/>
+  <rect class="pending" x="50" y="475" width="270" height="105" rx="14"/><text class="label" x="89" y="510">E3Z-LS63</text><text class="small" x="89" y="537">Supply + NPN/PNP pending</text><text class="small" x="89" y="562">Safe 3.3 V interface → PA4</text>
+  <path class="wire" d="M320 527 H430"/>
+
+  <rect class="module" x="880" y="145" width="270" height="82" rx="14"/><text class="label" x="919" y="180">W25Q64</text><text class="small" x="919" y="207">SPI1 + PB1 CS · 3.3 V</text>
+  <path class="wire" d="M770 186 H880"/>
+  <rect class="module" x="880" y="255" width="270" height="82" rx="14"/><text class="label" x="919" y="290">SSD1306</text><text class="small" x="919" y="317">PB6 SCL · PB7 SDA · 0x3C</text>
+  <path class="wire" d="M770 296 H880"/>
+  <rect class="module" x="880" y="365" width="270" height="105" rx="14"/><text class="label" x="919" y="400">ESP-01S</text><text class="small" x="919" y="427">PA9 TX → RX · PA10 RX ← TX</text><text class="small" x="919" y="452">Independent stable 3.3 V supply</text>
+  <path class="wire" d="M770 417 H880"/>
+  <path class="power" d="M1015 470 V610 H600 V570"/>
+  <rect class="module" x="880" y="500" width="270" height="82" rx="14"/><text class="label" x="919" y="535">USB-UART</text><text class="small" x="919" y="562">PA2 TX · PA3 RX · common GND</text>
+  <path class="wire" d="M770 541 H880"/>
+
+  <text class="note" x="50" y="660">虚线模块必须先核实器件版本、电源与输出电平；不得把未确认的工业信号直接送入 STM32。</text>
+  <text class="small" x="50" y="702">All logic must share a ground reference. Never apply 5 V directly to ESP-01S GPIO or an STM32 input.</text>
+</svg>

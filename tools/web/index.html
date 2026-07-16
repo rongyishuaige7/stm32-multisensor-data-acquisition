@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>数据采集系统 · 实时监控</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #0b1020;
+    --panel: #131a33;
+    --border: #243056;
+    --text: #e6ecff;
+    --muted: #8893b8;
+    --ok: #3ddc97;
+    --warn: #ffb454;
+    --bad: #ff5c7a;
+    --accent: #6aa6ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    background: linear-gradient(135deg, #0b1020, #11183a); color: var(--text); min-height: 100vh;
+  }
+  header {
+    padding: 18px 24px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: 0.5px; }
+  .pill { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+  .pill.ok   { background: rgba(61,220,151,0.15); color: var(--ok); }
+  .pill.bad  { background: rgba(255,92,122,0.15); color: var(--bad); }
+  main { padding: 24px; display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 16px; max-width: 1200px; margin: 0 auto; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px; transition: transform 0.15s;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px; }
+  .value { margin-top: 8px; font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .unit  { color: var(--muted); font-size: 14px; margin-left: 6px; font-weight: 400; }
+  .alarm-flags { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .flag { padding: 2px 8px; border-radius: 6px; font-size: 11px; }
+  .flag.on { background: var(--bad); color: #fff; }
+  .flag.off { background: rgba(255,255,255,0.05); color: var(--muted); }
+
+  section.history { max-width: 1200px; margin: 8px auto 32px; padding: 0 24px; }
+  section.history h2 { font-size: 14px; color: var(--muted); margin: 16px 0 8px; font-weight: 500; }
+  .controls { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  input, button {
+    background: var(--panel); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px; font-size: 13px; font-family: inherit;
+  }
+  input { width: 80px; }
+  button { cursor: pointer; background: var(--accent); border-color: var(--accent); color: #061029; font-weight: 600; }
+  button:hover { filter: brightness(1.1); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  tbody tr:hover { background: rgba(106,166,255,0.05); }
+
+  .log { max-width: 1200px; margin: 0 auto 32px; padding: 0 24px; }
+  .log h2 { font-size: 14px; color: var(--muted); margin: 0 0 8px; font-weight: 500; }
+  .log pre {
+    background: #050811; border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px; max-height: 200px; overflow-y: auto; font-size: 12px; color: var(--muted);
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>STM32 多传感器采集 · 实时监控</h1>
+  <span id="status" class="pill bad">未连接</span>
+</header>
+
+<main>
+  <div class="card"><div class="label">温度</div>
+    <div class="value"><span id="temp">--</span><span class="unit">°C</span></div></div>
+  <div class="card"><div class="label">转速</div>
+    <div class="value"><span id="rpm">--</span><span class="unit">RPM</span></div></div>
+  <div class="card"><div class="label">压力</div>
+    <div class="value"><span id="press">--</span><span class="unit">g</span></div></div>
+  <div class="card"><div class="label">光照</div>
+    <div class="value"><span id="light">--</span></div></div>
+  <div class="card"><div class="label">报警</div>
+    <div class="value" style="font-size:18px;"><span id="alarm">0x00</span></div>
+    <div class="alarm-flags">
+      <span class="flag" id="flag-t">TEMP</span>
+      <span class="flag" id="flag-r">RPM</span>
+      <span class="flag" id="flag-p">PRESS</span>
+      <span class="flag" id="flag-l">LIGHT</span>
+    </div>
+  </div>
+  <div class="card"><div class="label">运行时长</div>
+    <div class="value" style="font-size:24px;"><span id="up">--</span></div></div>
+</main>
+
+<section class="history">
+  <h2>历史记录查询</h2>
+  <div class="controls">
+    起始 <input id="from" type="number" min="0" value="0">
+    结束 <input id="to" type="number" min="0" value="20">
+    <button id="btn-hist">读取</button>
+    <span style="color:var(--muted);font-size:12px;">从 W25Q64 中读取一段离线缓存记录</span>
+  </div>
+  <table>
+    <thead><tr><th>#</th><th>温度</th><th>RPM</th><th>压力</th><th>光照</th><th>报警</th><th>时刻(s)</th></tr></thead>
+    <tbody id="hist-body"></tbody>
+  </table>
+</section>
+
+<section class="log">
+  <h2>原始日志</h2>
+  <pre id="log"></pre>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+const log = $("log");
+function logLine(s) {
+  log.textContent += s + "\n";
+  log.scrollTop = log.scrollHeight;
+}
+
+const ws = new WebSocket(`ws://${location.host}/ws`);
+ws.onopen = () => logLine("[ws] connected");
+ws.onclose = () => {
+  logLine("[ws] closed");
+  $("status").className="pill bad";
+  $("status").textContent="未连接";
+};
+ws.onmessage = (e) => {
+  let m;
+  try { m = JSON.parse(e.data); } catch { logLine(e.data); return; }
+  logLine(JSON.stringify(m));
+  if (m.type === "status") {
+    if (m.esp === "online") { $("status").className="pill ok";  $("status").textContent="在线"; }
+    else                    { $("status").className="pill bad"; $("status").textContent="ESP 离线"; }
+  } else if (m.type === "data") {
+    $("temp").textContent  = m.t.toFixed(2);
+    $("rpm").textContent   = m.r;
+    $("press").textContent = m.p;
+    $("light").textContent = m.l ? "ON" : "OFF";
+    const a = m.a;
+    $("alarm").textContent = "0x" + a.toString(16).padStart(2,"0").toUpperCase();
+    setFlag("flag-t", a & 0x01); setFlag("flag-r", a & 0x02);
+    setFlag("flag-p", a & 0x04); setFlag("flag-l", a & 0x08);
+    $("up").textContent = fmtUp(m.u);
+  } else if (m.type === "hist") {
+    addHistRow(m);
+  } else if (m.type === "hist_done") {
+    logLine(`[hist] done ${m.from}..${m.to}`);
+  }
+};
+
+function setFlag(id, on) {
+  $(id).className = "flag " + (on ? "on" : "off");
+}
+function fmtUp(s) {
+  const h = (s/3600|0), m = (s%3600/60|0), ss = s%60;
+  return `${h}h ${m}m ${ss}s`;
+}
+
+$("btn-hist").onclick = () => {
+  const tbody = $("hist-body");
+  while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+  const f = parseInt($("from").value), t = parseInt($("to").value);
+  ws.send(JSON.stringify({cmd:"history", from:f, to:t}));
+};
+function addHistRow(m) {
+  const tr = document.createElement("tr");
+  const cells = [
+    String(m.i),
+    m.t.toFixed(2),
+    String(m.r),
+    String(m.p),
+    m.l ? "ON" : "OFF",
+    "0x" + m.a.toString(16).padStart(2, "0"),
+    String(m.u),
+  ];
+  for (const text of cells) {
+    const td = document.createElement("td");
+    td.textContent = text;
+    tr.appendChild(td);
+  }
+  $("hist-body").appendChild(tr);
+}
+</script>
+</body>
+</html>
