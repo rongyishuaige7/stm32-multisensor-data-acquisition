@@ -70,3 +70,9 @@ Source-confirmed · Build-verified · Current hardware re-test not run
 
 Do not use “hardware verified”, “production ready”, “industrial grade” or an
 online-status badge.
+
+## Historical media and EDA added on 2026-07-18
+
+sanitized historical photo(s). See [MEDIA_EVIDENCE](MEDIA_EVIDENCE.md) for dates, sanitization, omissions, and evidence limits.
+
+This publication update adds historical evidence only. Current hardware re-test not run.
