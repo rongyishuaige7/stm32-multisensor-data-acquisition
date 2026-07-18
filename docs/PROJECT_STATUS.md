@@ -1,18 +1,18 @@
-# Project status
+# 项目状态
 
-Status date: 2026-07-17
+状态日期：2026-07-17
 
-## Evidence levels
+## 证据等级
 
-| Level | Status | Meaning |
+| 等级 | 状态 | 含义 |
 |---|---|---|
-| Source-confirmed | PASS | Public candidate source has been compared with the local source and historical archive |
-| Build-verified | PASS | Firmware builds from the example configuration; Python tools pass syntax checks |
-| Historically demonstrated | UNKNOWN | No suitable dated photo or video was found in the reviewed source/archive |
-| Hardware re-verified | NOT RUN | The current candidate commit has not been flashed and tested on the physical prototype |
-| EDA/manufacturing available | NO | No schematic, PCB, CubeMX `.ioc`, Gerber or manufacturing source was found |
+| 源码已确认 | 通过 | 公开候选源码已与本地源码和历史归档对比 |
+| 构建已验证 | 通过 | 固件可从示例配置构建；Python 工具通过语法检查 |
+| 历史演示 | 未知 | 审查的源码/归档中未找到合适的带日期照片或视频 |
+| 真机复测 | 未执行 | 当前候选提交尚未烧录到实体原型进行测试 |
+| EDA/制造资料可用性 | 无 | 未找到原理图、PCB、CubeMX `.ioc`、Gerber 或制造源文件 |
 
-## What is confirmed
+## 已确认内容
 
 - The project contains STM32F103 firmware for four sensor inputs, W25Q64
   storage, SSD1306 output, alarms and ESP-01S AT networking.
@@ -31,24 +31,22 @@ Status date: 2026-07-17
 See [SOURCE_PROVENANCE.md](SOURCE_PROVENANCE.md) and
 [VERIFICATION.md](VERIFICATION.md).
 
-## Documentation correction made for this candidate
+## 此候选版本的文档修正
 
-The historical README and a comment in `esp_uart.h` described ESP-01S on
-USART2, but the executable source consistently uses:
+历史 README 和 `esp_uart.h` 中的注释将 ESP-01S 描述为使用
+USART2，但可执行源码一致使用：
 
 ```text
 ESP-01S: USART1, PA9 TX / PA10 RX
 debug:   USART2, PA2 TX / PA3 RX
 ```
 
-The candidate documentation and header comment now follow the executable
-source. This is a **source-level correction**. It still needs physical wiring
-confirmation before the status can become Hardware re-verified.
+候选版本的文档和头文件注释现已与可执行源码一致。这是一次**源码级修正**；在状态可升级为“真机已复测”前，仍需确认实体接线。
 
-## Known limitations
+## 已知限制
 
 - Trusted-LAN-only TCP, with no authentication or TLS.
-- Current hardware re-test not run.
+- 当前未进行真机复测。
 - No current photos or video.
 - No EDA or manufacturing files.
 - FSR402 value is an uncalibrated demonstration mapping.
@@ -60,19 +58,18 @@ confirmation before the status can become Hardware re-verified.
 - The optional Web gateway uses a bounded major-version dependency, not a
   fully locked environment.
 
-## Status wording rule
+## 状态表述规则
 
-Until physical evidence is added, public descriptions must use:
+在补充实体证据前，公开描述必须使用：
 
 ```text
-Source-confirmed · Build-verified · Current hardware re-test not run
+源码已确认 · 构建已验证 · 当前未进行真机复测
 ```
 
-Do not use “hardware verified”, “production ready”, “industrial grade” or an
-online-status badge.
+不得使用“已真机验证”“生产就绪”“工业级”或在线状态徽章。
 
-## Historical media and EDA added on 2026-07-18
+## 2026-07-18 新增的历史素材与 EDA
 
-sanitized historical photo(s). See [MEDIA_EVIDENCE](MEDIA_EVIDENCE.md) for dates, sanitization, omissions, and evidence limits.
+已脱敏的历史照片。日期、脱敏处理、未公开材料和证据边界见 [MEDIA_EVIDENCE](MEDIA_EVIDENCE.md)。
 
-This publication update adds historical evidence only. Current hardware re-test not run.
+本次发布仅新增历史证据。当前未进行真机复测。

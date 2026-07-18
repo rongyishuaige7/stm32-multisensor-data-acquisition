@@ -8,10 +8,10 @@ photoelectric inputs, with W25Q64 history/offline buffering, ESP-01S AT
 networking, TCP JSON tools, OLED output and alarms.
 
 **Stack:** STM32F103 · C · PlatformIO · STM32Cube HAL · W25Q64 · ESP-01S
-**Evidence:** source-confirmed · isolated PlatformIO build passed · Python
-tools syntax-checked · current hardware re-test not run
-**Boundaries:** no current photos/video or EDA files · unauthenticated
-trusted-LAN TCP · sensor voltage interfaces require physical confirmation
+**证据：** 源码已确认 · 隔离 PlatformIO 构建通过 · Python
+工具已完成语法检查 · 当前未进行真机复测
+**边界：** 没有当前照片/视频或 EDA 文件 · 未认证的
+可信局域网 TCP · 传感器电压接口需要实体确认
 ```
 
 Keep the evidence and boundary lines synchronized with

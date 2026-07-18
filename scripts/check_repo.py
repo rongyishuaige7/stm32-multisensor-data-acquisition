@@ -160,8 +160,8 @@ def main() -> int:
     try:
         status = text(root / "docs/PROJECT_STATUS.md")
         required_boundaries = [
-            "| Hardware re-verified | NOT RUN |",
-            "Do not use “hardware verified”, “production ready”, “industrial grade”",
+            "| 真机复测 | 未执行 |",
+            "不得使用“已真机验证”“生产就绪”“工业级”",
         ]
         for boundary in required_boundaries:
             if boundary not in status:

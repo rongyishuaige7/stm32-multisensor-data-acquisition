@@ -7,13 +7,13 @@
 
 > **项目状态（2026-07-17）：** 当前公开候选的源码已确认，PlatformIO 固件构建和 Python 工具语法检查已通过；**尚未对当前提交做真机复测**。本仓库暂时没有实物照片、演示视频、EDA/原理图或 PCB 文件。详情见 [项目状态](docs/PROJECT_STATUS.md) 和 [验证记录](docs/VERIFICATION.md)。
 
-## Historical material evidence (2026-07-18 publication)
+## 历史素材证据（2026-07-18 发布）
 
-sanitized historical photo(s). See [MEDIA_EVIDENCE](docs/MEDIA_EVIDENCE.md) for dates, sanitization, omissions, and evidence limits.
+已脱敏的历史照片。日期、脱敏处理、未公开材料和证据边界见 [MEDIA_EVIDENCE](docs/MEDIA_EVIDENCE.md)。
 
-![Historical STM32 data-acquisition prototype, 2026-05-02](assets/photos/historical-prototype-overview.jpg)
+![历史 STM32 数据采集原型，2026-05-02](assets/photos/historical-prototype-overview.jpg)
 
-Historical media/EDA do not prove that the current public commit was flashed or re-tested on hardware. **Current hardware re-test not run.**
+历史照片、截图或 EDA 不证明当前公开提交已烧录或完成真机复测。**当前未进行真机复测。**
 
 
 ## 系统闭环
