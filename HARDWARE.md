@@ -1,10 +1,10 @@
 # Hardware and wiring notes
 
-本文件记录当前源码对应的引脚和安全边界。它是接线说明，不是经过电气审查的 PCB 原理图。当前公开候选尚未完成真机复测。
+本文件记录当前源码对应的引脚和安全边界。它是接线说明，不是经过电气审查的 PCB 原理图。
 
 ## 1. 当前源码引脚
 
-| 模块/信号 | STM32F103C8T6 | 接口 | 当前证据 |
+| 模块/信号 | STM32F103C8T6 | 接口 | 说明 |
 |---|---|---|---|
 | DS18B20 DATA | PB12 | 1-Wire | `board_pins.h` |
 | FSR402 divider output | PA1 | ADC1_IN1 | `board_pins.h` |

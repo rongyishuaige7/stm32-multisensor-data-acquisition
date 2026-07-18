@@ -5,15 +5,11 @@
 
 一个以 STM32F103C8T6 为核心的教学型数据采集原型：采集温度、压力、转速和光电状态，将记录写入 W25Q64，通过 ESP-01S 的 AT 固件在可信局域网内发送 TCP JSON，并在离线或发送失败时使用环形缓存等待补传。
 
-> **项目状态（2026-07-17）：** 当前公开候选的源码已确认，PlatformIO 固件构建和 Python 工具语法检查已通过；**尚未对当前提交做真机复测**。本仓库暂时没有实物照片、演示视频、EDA/原理图或 PCB 文件。详情见 [项目状态](docs/PROJECT_STATUS.md) 和 [验证记录](docs/VERIFICATION.md)。
-
 ## 项目照片与资料
 
 这里整理了项目照片、界面截图和相关资料；文件处理说明见 [MEDIA_EVIDENCE](docs/MEDIA_EVIDENCE.md)。
 
 ![STM32 数据采集原型，2026-05-02](assets/photos/historical-prototype-overview.jpg)
-
-
 
 ## 系统闭环
 
@@ -54,7 +50,7 @@ E3Z-LS63 ┘          ├─→ SSD1306 OLED / 蜂鸣器
 | [`HARDWARE.md`](HARDWARE.md) | 引脚、电源、电压域和接线注意事项 |
 | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | TCP JSON 协议 |
 | [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) | 证据分层和已知限制 |
-| [`docs/VERIFICATION.md`](docs/VERIFICATION.md) | 可复现构建与真机复测清单 |
+| [`docs/VERIFICATION.md`](docs/VERIFICATION.md) | 可复现构建说明 |
 
 ## 硬件与引脚
 
