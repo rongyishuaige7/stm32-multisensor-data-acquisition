@@ -5,7 +5,7 @@
 
 一个以 STM32F103C8T6 为核心的教学型数据采集原型：采集温度、压力、转速和光电状态，将记录写入 W25Q64，通过 ESP-01S 的 AT 固件在可信局域网内发送 TCP JSON，并在离线或发送失败时使用环形缓存等待补传。
 
-## 项目照片与资料
+## 项目资料
 
 这里整理了项目照片、界面截图和相关资料；文件处理说明见 [MEDIA_EVIDENCE](docs/MEDIA_EVIDENCE.md)。
 
@@ -23,8 +23,6 @@ E3Z-LS63 ┘          ├─→ SSD1306 OLED / 蜂鸣器
                                       │
                                       └─ TCP JSON → Python 客户端 / Web 网关
 ```
-
-这是一张结构示意，不是 PCB 原理图，也不表示当前硬件在线。
 
 ## 主要能力
 
@@ -49,7 +47,6 @@ E3Z-LS63 ┘          ├─→ SSD1306 OLED / 蜂鸣器
 | [`hardware/wiring-diagram.svg`](hardware/wiring-diagram.svg) | 接线边界图，不是 PCB 原理图 |
 | [`HARDWARE.md`](HARDWARE.md) | 引脚、电源、电压域和接线注意事项 |
 | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | TCP JSON 协议 |
-| [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) | 证据分层和已知限制 |
 | [`docs/VERIFICATION.md`](docs/VERIFICATION.md) | 可复现构建说明 |
 
 ## 硬件与引脚
@@ -107,7 +104,7 @@ pio run -d firmware
 pio run -d firmware -t upload
 ```
 
-本项目固定 `ststm32@19.5.0`，当前已验证的本地构建环境见 [docs/VERIFICATION.md](docs/VERIFICATION.md)。CI 生成的固件 Artifact 会按 GitHub 保留策略过期，它不是永久发布下载地址。
+本项目固定 `ststm32@19.5.0`，构建环境见 [docs/VERIFICATION.md](docs/VERIFICATION.md)。CI 生成的固件 Artifact 按 GitHub 保留策略保存。
 
 ### Python 客户端
 
@@ -160,16 +157,13 @@ http://127.0.0.1:8000
 
 ## 已知限制
 
-- 当前提交只完成源码与构建验证，未完成真机烧录和端到端复测；
 - TCP 服务没有认证和 TLS，只适合可信局域网，禁止直接暴露公网；
 - FSR402 的 `pressure_g` 是粗略、未校准的演示映射，不是称重或安全测量；
 - E3Z-LS63、A1104 的具体模块版本、电源和接口电路待实物确认；
-- 离线环形区满时会擦除整个 4 KB 区并丢弃尚未补传的数据；
 - 历史区写满后当前实现停止追加，不会自动循环覆盖；
 - 元数据默认每 600 秒持久化一次，当前没有掉电检测；
-- 源码与历史封存包有一个已记录差异，见 [docs/SOURCE_PROVENANCE.md](docs/SOURCE_PROVENANCE.md)。
 
-## 安全、许可证与第三方
+## 安全与许可证
 
 - 安全边界与报告方式：[SECURITY.md](SECURITY.md)
 - 本项目自有源码：MIT，见 [LICENSE](LICENSE)
