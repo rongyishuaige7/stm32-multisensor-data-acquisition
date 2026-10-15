@@ -5,8 +5,8 @@ Status date: 2026-07-17
 ## Read-only sources reviewed
 
 ```text
-/home/rongyi/桌面/数据采集系统
-/mnt/shared/2026项目/数据采集系统.zip
+~/桌面/数据采集系统
+source-archives/2026项目/数据采集系统.zip
 ```
 
 The paths above are local provenance references and are not required to build
